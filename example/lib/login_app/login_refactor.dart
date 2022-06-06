@@ -1,8 +1,9 @@
+import 'package:example/kakao/kakao_login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../kakao/kakao_login.dart';
 import '../kakao/kakao_main_view_model.dart';
-import '../kakao/kako_login_page.dart';
+import '../kakao/kakao_login_page.dart';
 import '../my_button/my_button.dart';
 import './google_login.dart';
 import './home.dart';
@@ -13,7 +14,7 @@ class LogInRefac extends StatefulWidget {
 }
 
 class _LogInRefacState extends State<LogInRefac> {
-  final viewModel = KakaoMainViewModel(KakaoLogin());
+  final viewModel = MainViewModel(KakaoLogin());
 
   Future<void> signOut() async {
     try {
@@ -24,23 +25,30 @@ class _LogInRefacState extends State<LogInRefac> {
   @override
   Widget build(BuildContext context) {
     signOut();
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.orangeAccent,
-        appBar: AppBar(
-          title: Text("T4 Calendar",
-            style: TextStyle(
-              fontFamily: 'Noto_Sans_KR',
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.orangeAccent,
-        ),
 
-        body:_buildButton(),
+    return SafeArea(
+      child: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+        return Scaffold(
+          backgroundColor: Colors.orangeAccent,
+          appBar: AppBar(
+            title: Text("T4 Calendar",
+              style: TextStyle(
+                fontFamily: 'Noto_Sans_KR',
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: Colors.orangeAccent,
+          ),
+
+          body:_buildButton(),
+        );
+      }
+
       ),
     );
   }
@@ -81,8 +89,10 @@ class _LogInRefacState extends State<LogInRefac> {
             color: Colors.amberAccent,
             radius: 4.0,
             onPressed: () async {
-              await viewModel.login();
-              setState((){});
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => KakaoLoginPage()),
+              );
             },
           ),
 

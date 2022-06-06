@@ -1,9 +1,9 @@
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'social_login.dart';
 
-class KakaoLogin implements KakaoSocialLogin{
+class KakaoLogin implements SocialLogin {
   @override
-  Future<bool> login() async{
+  Future<bool> login() async {
     try {
       bool isInstalled = await isKakaoTalkInstalled();
       if (isInstalled) {
@@ -20,7 +20,6 @@ class KakaoLogin implements KakaoSocialLogin{
         } catch (e) {
           return false;
         }
-
       }
     } catch (e) {
       return false;
@@ -28,7 +27,7 @@ class KakaoLogin implements KakaoSocialLogin{
   }
 
   @override
-  Future<bool> logout() async{
+  Future<bool> logout() async {
     try {
       await UserApi.instance.unlink();
       return true;
